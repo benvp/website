@@ -1,0 +1,10 @@
+@import "prism-material-themes/themes/material-palenight";
+
+pre[class*=language] {
+  background: #0f131a;
+  @apply px-4 py-3 leading-snug;
+}
+
+code[class*=language] {
+  @apply font-mono text-base;
+}
