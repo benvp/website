@@ -3,10 +3,24 @@ defmodule BenvpWeb.PostLive do
 
   alias Benvp.Blog
   alias Benvp.Notion.Renderer
+  alias BenvpWeb.SeoMeta
 
   def mount(%{"slug" => slug}, _session, socket) do
     post = Blog.get_post_by_slug!(slug)
-    {:ok, assign(socket, :post, post)}
+
+    meta_attrs =
+      SeoMeta.seo_meta_attrs(%SeoMeta{
+        title: SeoMeta.page_title(post.title),
+        description: post.abstract,
+        image_url: Routes.static_url(socket, "/images/meta-logo.png"),
+        url: Routes.live_path(socket, __MODULE__, post.slug)
+      })
+
+    {:ok,
+     socket
+     |> assign(:post, post)
+     |> assign(:page_title, SeoMeta.page_title(post.title))
+     |> assign(:meta_attrs, meta_attrs)}
   end
 
   def render(assigns) do

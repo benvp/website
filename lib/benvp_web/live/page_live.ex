@@ -5,7 +5,19 @@ defmodule BenvpWeb.PageLive do
 
   def mount(_params, _session, socket) do
     posts = Blog.get_latest_posts!()
-    {:ok, assign(socket, :posts, posts)}
+
+    meta_attrs =
+      BenvpWeb.SeoMeta.seo_meta_attrs(%BenvpWeb.SeoMeta{
+        title: "Benjamin von Polheim — benvp",
+        description: "I code React ⚛️ daily, like pretty UIs 🎨 and have a passion for Elixir 💧",
+        image_url: Routes.static_url(socket, "/images/meta-logo.png"),
+        url: Routes.live_path(socket, __MODULE__)
+      })
+
+    {:ok,
+     socket
+     |> assign(:posts, posts)
+     |> assign(:meta_attrs, meta_attrs)}
   end
 
   def render(assigns) do
