@@ -44,7 +44,7 @@ if config_env() == :prod do
   config :benvp,
     notion_access_token: System.get_env("NOTION_ACCESS_TOKEN"),
     notion_blog_database_id: System.get_env("NOTION_BLOG_DATABASE_ID"),
-    notion_media_dir: System.get_env("NOTION_MEDIR_DIR")
+    notion_media_dir: System.get_env("NOTION_MEDIA_DIR")
 
   # ## Using releases
   #
