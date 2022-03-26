@@ -1,6 +1,8 @@
 defmodule BenvpWeb.Endpoint do
   use Phoenix.Endpoint, otp_app: :benvp
 
+  @notion_media_dir Application.fetch_env!(:benvp, :notion_media_dir)
+
   # The session will be stored in the cookie and signed,
   # this means its contents can be read but not tampered with.
   # Set :encryption_salt if you would also like to encrypt it.
@@ -12,6 +14,11 @@ defmodule BenvpWeb.Endpoint do
 
   socket "/live", Phoenix.LiveView.Socket, websocket: [connect_info: [session: @session_options]]
 
+  plug Plug.Static,
+    at: "/media",
+    from: @notion_media_dir,
+    gzip: false
+
   # Serve at "/" the static files from "priv/static" directory.
   #
   # You should set gzip to true if you are running phx.digest
@@ -21,7 +28,7 @@ defmodule BenvpWeb.Endpoint do
     from: :benvp,
     gzip: Application.fetch_env!(:benvp, :env) == :prod,
     only:
-      ~w(assets fonts images media robots.txt site.webmanifest favicon.ico favicon-16x16.png favicon-32x32.png android-chrome-192x192.png android-chrome-512x512.png apple-touch-icon.png robots.txt)
+      ~w(assets fonts images robots.txt site.webmanifest favicon.ico favicon-16x16.png favicon-32x32.png android-chrome-192x192.png android-chrome-512x512.png apple-touch-icon.png robots.txt)
 
   # Code reloading can be explicitly enabled under the
   # :code_reloader configuration of your endpoint.
