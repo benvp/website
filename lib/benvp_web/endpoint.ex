@@ -19,9 +19,9 @@ defmodule BenvpWeb.Endpoint do
   plug Plug.Static,
     at: "/",
     from: :benvp,
-    gzip: false,
+    gzip: Application.fetch_env!(:benvp, :env) == :prod,
     only:
-      ~w(assets fonts images robots.txt site.webmanifest favicon.ico favicon-16x16.png favicon-32x32.png android-chrome-192x192.png android-chrome-512x512.png apple-touch-icon.png robots.txt)
+      ~w(assets fonts images media robots.txt site.webmanifest favicon.ico favicon-16x16.png favicon-32x32.png android-chrome-192x192.png android-chrome-512x512.png apple-touch-icon.png robots.txt)
 
   # Code reloading can be explicitly enabled under the
   # :code_reloader configuration of your endpoint.

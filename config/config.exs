@@ -15,9 +15,11 @@ config :benvp, BenvpWeb.Endpoint,
   live_view: [signing_salt: "IlDt1j9C"]
 
 config :benvp,
+  env: Mix.env(),
   notion_client: Benvp.Notion.Client.HTTP,
   notion_access_token: "",
-  notion_blog_database_id: ""
+  notion_blog_database_id: "",
+  notion_media_dir: "priv/static/media"
 
 # Configures Elixir's Logger
 config :logger, :console,

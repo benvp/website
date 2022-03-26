@@ -1,5 +1,6 @@
 defmodule Benvp.Blog do
   alias Benvp.Blog.{Cache, Post}
+  alias Benvp.Notion
 
   def get_latest_posts!(amount \\ 3) do
     Cache.get(:latest_posts, fn -> fetch_latest_posts(amount) end)
@@ -11,7 +12,7 @@ defmodule Benvp.Blog do
 
   defp fetch_latest_posts(amount) do
     {:ok, posts} =
-      notion_client().query_database(database_id(), %{
+      Notion.client().query_database(database_id(), %{
         page_size: amount,
         filter: %{
           property: "Status",
@@ -32,7 +33,7 @@ defmodule Benvp.Blog do
 
   defp fetch_post_by_slug(slug) do
     {:ok, posts} =
-      notion_client().query_database(database_id(), %{
+      Notion.client().query_database(database_id(), %{
         filter: %{
           and: [
             %{
@@ -55,10 +56,13 @@ defmodule Benvp.Blog do
   end
 
   defp populate_post(post) do
-    {:ok, content} = notion_client().get_block(post["id"], recursive: true)
-    Post.from_notion(post, content)
+    {:ok, content} = Notion.client().get_block(post["id"], recursive: true)
+
+    post
+    |> Post.from_notion(content)
+    |> Post.maybe_download_property_images()
+    |> Post.maybe_download_media()
   end
 
-  defp notion_client, do: Application.fetch_env!(:benvp, :notion_client)
   defp database_id, do: Application.fetch_env!(:benvp, :notion_blog_database_id)
 end
