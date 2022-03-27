@@ -1,6 +1,4 @@
 defmodule BenvpWeb.LiveHelpers do
-  import Phoenix.LiveView
-
   def truncate(string, length \\ 30)
   def truncate(nil, _length), do: ""
 

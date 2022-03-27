@@ -14,6 +14,8 @@ config :benvp, BenvpWeb.Endpoint, cache_static_manifest: "priv/static/cache_mani
 # Do not print debug messages in production
 config :logger, level: :info
 
+config :benvp, notion_media_dir: System.get_env("NOTION_MEDIA_DIR")
+
 # ## SSL Support
 #
 # To get SSL working, you will need to add the `https` key

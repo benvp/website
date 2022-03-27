@@ -56,7 +56,7 @@ defmodule Benvp.Notion.Client.HTTP do
     end
   end
 
-  def get_block_children(id, opts \\ []) do
+  def get_block_children(id) do
     case get(@base_url <> "/blocks/#{id}/children") do
       {:ok, %Finch.Response{status: 200} = res} ->
         blocks =

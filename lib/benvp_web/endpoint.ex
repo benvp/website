@@ -1,8 +1,6 @@
 defmodule BenvpWeb.Endpoint do
   use Phoenix.Endpoint, otp_app: :benvp
 
-  @notion_media_dir Application.fetch_env!(:benvp, :notion_media_dir)
-
   # The session will be stored in the cookie and signed,
   # this means its contents can be read but not tampered with.
   # Set :encryption_salt if you would also like to encrypt it.
@@ -16,7 +14,7 @@ defmodule BenvpWeb.Endpoint do
 
   plug Plug.Static,
     at: "/media",
-    from: @notion_media_dir,
+    from: Application.fetch_env!(:benvp, :notion_media_dir),
     gzip: false
 
   # Serve at "/" the static files from "priv/static" directory.

@@ -35,6 +35,11 @@ RUN mix local.hex --force && \
 # set build ENV
 ENV MIX_ENV="prod"
 
+# We need to set this here because Plug options need to
+# be available at compilation time. We can't use runtime.exs
+# for this variable.
+ENV NOTION_MEDIA_DIR="/app/media"
+
 # install mix dependencies
 COPY mix.exs mix.lock ./
 RUN mix deps.get --only $MIX_ENV

@@ -4,7 +4,7 @@ defmodule Benvp.Notion do
   end
 
   @doc """
-  Saves blog media to the notion_medir_dir.
+  Saves blog media to the notion_media_dir.
 
   Returns a tuple of {file_path, public_url}
   """
