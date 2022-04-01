@@ -18,6 +18,11 @@ config :benvp, BenvpWeb.Endpoint,
     npm: ["run", "watch-styles", cd: Path.expand("../assets", __DIR__)]
   ]
 
+config :benvp,
+  notion_access_token: System.get_env("NOTION_ACCESS_TOKEN"),
+  notion_blog_database_id: System.get_env("NOTION_BLOG_DATABASE_ID"),
+  notion_media_dir: "priv/static/media"
+
 # ## SSL Support
 #
 # In order to use HTTPS in development, a self-signed
@@ -62,5 +67,3 @@ config :phoenix, :stacktrace_depth, 20
 
 # Initialize plugs at runtime for faster development compilation
 config :phoenix, :plug_init_mode, :runtime
-
-import_config("./dev.secret.exs")
