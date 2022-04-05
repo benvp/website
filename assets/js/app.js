@@ -22,10 +22,12 @@ import { Socket } from 'phoenix';
 import { LiveSocket } from 'phoenix_live_view';
 import topbar from 'topbar';
 
-import { animate, spring } from 'motion';
+import { createLiveMotion } from './motion';
 
 // Syntax highlighting
 import Prism from './prism';
+
+const { hook: motionHook, handleMotionUpdates } = createLiveMotion();
 
 const hooks = {
   Prism: {
@@ -33,32 +35,7 @@ const hooks = {
       Prism.highlightAll(document.querySelector('pre code'));
     },
   },
-  Motion: {
-    getConfig() {
-      return this.el.dataset.motion ? JSON.parse(this.el.dataset.motion) : undefined;
-    },
-    animate() {
-      const { keyframes, transition } = this.getConfig() || {};
-
-      console.log(transition, keyframes);
-      if (transition?.__easing?.[0] === 'spring') {
-        const {
-          __easing: [_, options],
-          ...t
-        } = transition;
-
-        animate(this.el, keyframes, { ...t, easing: spring(options) });
-      } else {
-        animate(this.el, keyframes, transition);
-      }
-    },
-    mounted() {
-      this.animate();
-    },
-    updated() {
-      this.animate();
-    },
-  },
+  ...motionHook,
 };
 
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute('content');
@@ -67,18 +44,10 @@ let liveSocket = new LiveSocket('/live', Socket, {
   hooks,
   dom: {
     onBeforeElUpdated(from, to) {
-      if (from.dataset.motion) {
-        if (from.getAttribute('style') === null) {
-          to.removeAttribute('style');
-        } else {
-          to.setAttribute('style', from.getAttribute('style'));
-        }
-      }
+      handleMotionUpdates(from, to);
     },
   },
 });
-
-window.addEventListener('benvp:animate', (e) => {});
 
 // Show progress bar on live navigation and form submits
 topbar.config({ barColors: { 0: '#00FFBF' }, shadowColor: 'rgba(0, 0, 0, .3)' });

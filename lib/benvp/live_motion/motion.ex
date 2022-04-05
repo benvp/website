@@ -1,5 +1,5 @@
 defmodule LiveMotion.Motion do
-  defstruct keyframes: %{}, transition: nil
+  defstruct keyframes: %{}, transition: nil, exit: nil
 
   defimpl Phoenix.HTML.Safe, for: LiveMotion.Motion do
     def to_iodata(%LiveMotion.Motion{} = motion) do

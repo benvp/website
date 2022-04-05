@@ -2,6 +2,7 @@ defmodule BenvpWeb.PageLive do
   use BenvpWeb, :live_view
 
   alias Benvp.Blog
+  alias LiveMotion
 
   def mount(_params, _session, socket) do
     posts = Blog.get_latest_posts!()
@@ -22,31 +23,38 @@ defmodule BenvpWeb.PageLive do
 
   def render(assigns) do
     ~H"""
-    <div class="py-8 px-8 sm:px-16 lg:px-0 overflow-x-hidden">
-      <div class="absolute inset-[0] lg:inset-[-40px] top-[320px] sm:top-[40px] lg:top-[280px] bg-[url('/images/bg-wave.svg')] bg-cover bg-center opacity-70 select-none -z-10"></div>
+    <LiveMotion.motion
+      id="main-content"
+      initial={[y: 20, opacity: 0]}
+      animate={[y: 0, opacity: 1]}
+      exit={[y: 20, opacity: 0]}
+    >
+      <div class="py-8 px-8 sm:px-16 lg:px-0 overflow-x-hidden">
+        <div class="absolute inset-[0] lg:inset-[-40px] top-[320px] sm:top-[40px] lg:top-[280px] bg-[url('/images/bg-wave.svg')] bg-cover bg-center opacity-70 select-none -z-10"></div>
 
-      <.hero />
+        <.hero />
 
-      <section class="max-w-screen-md mx-auto mt-20 sm:mt-48">
-        <.terminal />
-      </section>
+        <section class="max-w-screen-md mx-auto mt-20 sm:mt-48">
+          <.terminal />
+        </section>
 
-      <section class="max-w-screen-md mx-auto sm:grid sm:grid-cols-12 mt-40">
-        <div class="sm:col-span-3">
-          <.section_title title="Blog" />
-        </div>
-        <div class="mt-12 sm:mt-0 sm:col-start-5 sm:col-span-8 space-y-20">
-          <%= for post <- @posts do %>
-            <.blog_entry
-              title={post.title}
-              date={post.created_at}
-              text={post.abstract}
-              slug={post.slug || ""}
-            />
-          <% end %>
-        </div>
-      </section>
-    </div>
+        <section class="max-w-screen-md mx-auto sm:grid sm:grid-cols-12 mt-40">
+          <div class="sm:col-span-3">
+            <.section_title title="Blog" />
+          </div>
+          <div class="mt-12 sm:mt-0 sm:col-start-5 sm:col-span-8 space-y-20">
+            <%= for post <- @posts do %>
+              <.blog_entry
+                title={post.title}
+                date={post.created_at}
+                text={post.abstract}
+                slug={post.slug || ""}
+              />
+            <% end %>
+          </div>
+        </section>
+      </div>
+    </LiveMotion.motion>
     """
   end
 
