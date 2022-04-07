@@ -36,7 +36,7 @@ defmodule Benvp.MixProject do
       {:phoenix, "~> 1.6.4"},
       {:phoenix_html, "~> 3.0"},
       {:phoenix_live_reload, "~> 1.2", only: :dev},
-      {:phoenix_live_view, "~> 0.17.5"},
+      {:phoenix_live_view, "~> 0.17.8"},
       {:floki, ">= 0.30.0", only: [:dev, :test]},
       {:phoenix_live_dashboard, "~> 0.6"},
       {:telemetry_metrics, "~> 0.6"},
@@ -44,7 +44,7 @@ defmodule Benvp.MixProject do
       {:gettext, "~> 0.18"},
       {:jason, "~> 1.2"},
       {:plug_cowboy, "~> 2.5"},
-      {:finch, "~> 0.10.0"},
+      {:finch, "~> 0.11.0"},
       {:notion_renderer, "~> 0.1.0"}
     ]
   end

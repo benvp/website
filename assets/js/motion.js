@@ -77,6 +77,8 @@ export function createLiveMotion() {
           ? transition.duration * 1000
           : DEFAULT_TRANSITION_DURATION;
 
+      // TODO: check if there is a better way than relying on the global
+      // liveSocket variable.
       liveSocket.transition(duration, () => {
         doAnimation(target, { keyframes: exit, transition }).finished.then(
           () => (target.style.display = 'none'),
