@@ -4,6 +4,7 @@ defmodule BenvpWeb.PostLive do
   alias Benvp.Blog
   alias Benvp.Notion.Renderer
   alias BenvpWeb.SeoMeta
+  alias LiveMotion
 
   def mount(%{"slug" => slug}, _session, socket) do
     post = Blog.get_post_by_slug!(slug)
@@ -25,9 +26,14 @@ defmodule BenvpWeb.PostLive do
 
   def render(assigns) do
     ~H"""
-    <div>
+    <LiveMotion.motion
+      id="post-content"
+      initial={[y: 20, opacity: 0]}
+      animate={[y: 0, opacity: 1]}
+      exit={[y: 20, opacity: 0]}
+    >
       <.post post={@post} />
-    </div>
+    </LiveMotion.motion>
     """
   end
 

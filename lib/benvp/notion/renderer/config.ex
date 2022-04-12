@@ -6,9 +6,10 @@ defmodule Benvp.Notion.Renderer.Config do
 
   def code(block, {next, _self, _child}, opts) do
     language = opts[:full_block]["code"]["language"]
+    id = opts[:full_block]["id"]
     class = "language-#{language}"
     content = next.(block) |> String.replace("<br />", "\n")
 
-    "<pre class=\"#{class}\" phx-hook=\"Prism\" phx-update=\"ignore\" id=\"1\"><code>#{content}</code></pre>"
+    "<pre class=\"#{class}\" phx-hook=\"Prism\" phx-update=\"ignore\" id=\"#{id}\"><code>#{content}</code></pre>"
   end
 end

@@ -22,8 +22,12 @@ import { Socket } from 'phoenix';
 import { LiveSocket } from 'phoenix_live_view';
 import topbar from 'topbar';
 
+import { createLiveMotion } from 'live_motion';
+
 // Syntax highlighting
 import Prism from './prism';
+
+const { hook: motionHook, handleMotionUpdates } = createLiveMotion();
 
 const hooks = {
   Prism: {
@@ -31,10 +35,19 @@ const hooks = {
       Prism.highlightAll(document.querySelector('pre code'));
     },
   },
+  ...motionHook,
 };
 
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute('content');
-let liveSocket = new LiveSocket('/live', Socket, { params: { _csrf_token: csrfToken }, hooks });
+let liveSocket = new LiveSocket('/live', Socket, {
+  params: { _csrf_token: csrfToken },
+  hooks,
+  dom: {
+    onBeforeElUpdated(from, to) {
+      handleMotionUpdates(from, to);
+    },
+  },
+});
 
 // Show progress bar on live navigation and form submits
 topbar.config({ barColors: { 0: '#00FFBF' }, shadowColor: 'rgba(0, 0, 0, .3)' });
