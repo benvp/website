@@ -45,7 +45,8 @@ defmodule Benvp.MixProject do
       {:jason, "~> 1.2"},
       {:plug_cowboy, "~> 2.5"},
       {:finch, "~> 0.11.0"},
-      {:notion_renderer, "~> 0.1.0"}
+      {:notion_renderer, "~> 0.1.0"},
+      {:live_motion, "~> 0.1.0"}
     ]
   end
 
