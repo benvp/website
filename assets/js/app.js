@@ -21,8 +21,14 @@ import 'phoenix_html';
 import { Socket } from 'phoenix';
 import { LiveSocket } from 'phoenix_live_view';
 import topbar from 'topbar';
-
+import Plausible from 'plausible-tracker';
 import { createLiveMotion } from 'live_motion';
+
+const plausible = Plausible({
+  domain: 'benvp.co',
+});
+
+plausible.enableAutoPageviews();
 
 // Syntax highlighting
 import Prism from './prism';
