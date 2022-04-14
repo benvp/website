@@ -40,3 +40,4 @@ config/dev.secret.exs
 
 # Mac file system stuff
 .DS_Store
+/.elixir_ls
