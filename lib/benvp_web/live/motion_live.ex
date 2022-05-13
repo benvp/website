@@ -4,19 +4,27 @@ defmodule BenvpWeb.MotionLive do
   alias LiveMotion.JS, as: MotionJS
 
   def mount(_params, _session, socket) do
-    {:ok, socket}
+    {:ok, assign(socket, visible: true)}
+  end
+
+  def handle_event("remove", _params, socket) do
+    {:noreply, assign(socket, visible: false)}
   end
 
   def render(assigns) do
     ~H"""
     <div class="mt-12 max-w-screen-md m-auto flex justify-center space-y-4 flex-col items-center">
       <div class="my-4 flex justify-center">
-        <LiveMotion.motion
-          id="rectangle"
-          class="w-24 h-24 bg-benvp-green rounded-lg"
-          exit={[opacity: 0, y: -20]}
-        >
-        </LiveMotion.motion>
+        <%= if @visible do %>
+          <LiveMotion.motion
+            id="rectangle"
+            class="w-24 h-24 bg-benvp-green rounded-lg"
+            initial={[opacity: 0, y: -20]}
+            animate={[opacity: 1, y: 0]}
+            exit={[opacity: 0, y: -20]}
+          >
+          </LiveMotion.motion>
+        <% end %>
       </div>
 
       <button
@@ -41,7 +49,11 @@ defmodule BenvpWeb.MotionLive do
         class="px-4 py-2 bg-slate-800 rounded"
         phx-click={MotionJS.hide(to: "#rectangle")}
       >
-        Hide Square
+        Hide Square (JS)
+      </button>
+
+      <button type="button" class="px-4 py-2 bg-slate-800 rounded" phx-click="remove">
+        Hide Square (Server)
       </button>
 
       <button
