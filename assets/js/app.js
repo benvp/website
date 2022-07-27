@@ -33,15 +33,16 @@ plausible.enableAutoPageviews();
 // Syntax highlighting
 import Prism from './prism';
 
-const { hook: motionHook, handleMotionUpdates } = createLiveMotion();
+const { hooks: motionHooks, handleMotionUpdates } = createLiveMotion();
 
+console.log(motionHooks);
 const hooks = {
   Prism: {
     mounted() {
       Prism.highlightAll(document.querySelector('pre code'));
     },
   },
-  ...motionHook,
+  ...motionHooks,
 };
 
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute('content');

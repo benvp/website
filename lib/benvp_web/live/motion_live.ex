@@ -6,12 +6,16 @@ defmodule BenvpWeb.MotionLive do
   alias LiveMotion.JS, as: MotionJS
 
   def mount(_params, _session, socket) do
-    {:ok, assign(socket, visible: true, rotate: 0)}
+    {:ok, assign(socket, visible: true, rotate: 0, index: 0, range: 1..32)}
   end
 
   def handle_event("update", _params, socket) do
-    rotate = if socket.assigns.rotate == 0, do: 360, else: 0
+    rotate = if socket.assigns.rotate == 0, do: 90, else: 0
     {:noreply, assign(socket, rotate: rotate)}
+  end
+
+  def handle_event("show", _params, socket) do
+    {:noreply, assign(socket, visible: true)}
   end
 
   def handle_event("remove", _params, socket) do
@@ -33,37 +37,65 @@ defmodule BenvpWeb.MotionLive do
     {:noreply, socket}
   end
 
+  def handle_event("next", _params, socket) do
+    {:noreply, assign(socket, index: socket.assigns.index + 1)}
+  end
+
   def render(assigns) do
     ~H"""
     <div class="mt-12 max-w-screen-md m-auto flex justify-center space-y-4 flex-col items-center">
-      <div class="my-4 flex justify-center">
+      <div class="my-4 flex flex-wrap items-center justify-center space-x-4">
         <%= if @visible do %>
-          <LiveMotion.motion
-            id="rectangle"
-            class="w-24 h-24 bg-benvp-green rounded-lg"
-            initial={[opacity: 0, y: -20, rotate: 0]}
-            animate={[opacity: 1, y: 0, rotate: @rotate]}
-            exit={[opacity: 0, y: -20]}
-            on_animation_start="animation_start"
-            on_animation_complete="animation_complete"
-          >
-          </LiveMotion.motion>
+          <%= for i <- @range do %>
+            <LiveMotion.presence id={"presence-#{i}"}>
+              <LiveMotion.motion
+                id={"rectangle-#{i}-#{@index}"}
+                class="w-24 h-24 bg-benvp-green flex rounded-lg justify-center items-center mb-4"
+                initial={[opacity: 0, y: -30, rotate: 0]}
+                animate={
+                  [
+                    opacity: 1,
+                    y: 0,
+                    rotate: @rotate,
+                    transition: [duration: 0.3, delay: i * (Enum.random(1..5) / 100)]
+                  ]
+                }
+                exit={
+                  [
+                    opacity: 0,
+                    y: 30,
+                    transition: [delay: i * (Enum.random(1..5) / 100)]
+                  ]
+                }
+                transition={[duration: 2, easing: :spring]}
+                hover={[scale: 1.2]}
+                press={[scale: 0.9]}
+                on_motion_start="animation_start"
+                on_motion_complete="animation_complete"
+              >
+                <LiveMotion.motion
+                  id={"inner-rectangle-#{i}-#{@index}"}
+                  class="text-4xl text-black"
+                  initial={[opacity: 0, scale: 0.5]}
+                  animate={[opacity: 1, scale: 1]}
+                  transition={[delay: 0.5 + Enum.random(1..10) / 10]}
+                >
+                  <%= i + @index * 32 %>
+                </LiveMotion.motion>
+              </LiveMotion.motion>
+            </LiveMotion.presence>
+          <% end %>
         <% end %>
       </div>
+
+      <button type="button" class="px-4 py-2 bg-slate-800 rounded" phx-click="next">
+        Next
+      </button>
 
       <button
         type="button"
         class="px-4 py-2 bg-slate-800 rounded"
-        phx-click={
-          MotionJS.toggle(
-            [
-              in: [opacity: 1, y: 0],
-              out: [opacity: 0, y: -20]
-            ],
-            [],
-            to: "#rectangle"
-          )
-        }
+        phx-click={MotionJS.toggle(to: "#rectangle-#{@index}")}
       >
         Toggle Square
       </button>
@@ -71,7 +103,7 @@ defmodule BenvpWeb.MotionLive do
       <button
         type="button"
         class="px-4 py-2 bg-slate-800 rounded"
-        phx-click={MotionJS.animate([y: [0, -20, 10, 0]], [duration: 1], to: "#rectangle")}
+        phx-click={MotionJS.animate(to: "#rectangle-#{@index}")}
       >
         Animate Square (JS)
       </button>
@@ -79,13 +111,25 @@ defmodule BenvpWeb.MotionLive do
       <button
         type="button"
         class="px-4 py-2 bg-slate-800 rounded"
-        phx-click={MotionJS.hide(to: "#rectangle")}
+        phx-click={MotionJS.hide(to: "#rectangle-#{@index}")}
       >
         Hide Square (JS)
       </button>
 
+      <button
+        type="button"
+        class="px-4 py-2 bg-slate-800 rounded"
+        phx-click={MotionJS.show(to: "#rectangle-#{@index}", display: "flex")}
+      >
+        Show Square (JS)
+      </button>
+
       <button type="button" class="px-4 py-2 bg-slate-800 rounded" phx-click="remove">
         Hide Square (Server)
+      </button>
+
+      <button type="button" class="px-4 py-2 bg-slate-800 rounded" phx-click="show">
+        Show Square (Server)
       </button>
 
       <button type="button" class="px-4 py-2 bg-slate-800 rounded" phx-click="update">
@@ -95,7 +139,7 @@ defmodule BenvpWeb.MotionLive do
       <button
         type="button"
         class="px-4 py-2 bg-slate-800 rounded"
-        phx-click={MotionJS.show(to: "#love-div", keyframes: [opacity: 1, y: 20])}
+        phx-click={MotionJS.show(to: "#love", display: "inline-block")}
       >
         Show some love (non motion div)
       </button>
@@ -104,8 +148,8 @@ defmodule BenvpWeb.MotionLive do
         type="button"
         class="px-4 py-2 bg-slate-800 rounded"
         phx-click={
-          MotionJS.animate([rotate: [0, 45, -45, 90, 0]], [duration: 1], to: "#rectangle")
-          |> MotionJS.show(to: "#love-div", keyframes: [opacity: 1, y: 20, rotate: 180])
+          MotionJS.animate(to: "#rectangle-#{@index}")
+          |> MotionJS.show(to: "#love")
           |> Phoenix.LiveView.JS.push("some_push")
         }
       >
@@ -121,10 +165,6 @@ defmodule BenvpWeb.MotionLive do
       >
         <div class="text-4xl">❤️</div>
       </LiveMotion.motion>
-
-      <div id="love-div" class="my-4 justify-center hidden opacity-0">
-        <div class="text-4xl">❤️</div>
-      </div>
     </div>
     """
   end
