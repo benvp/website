@@ -22,6 +22,9 @@ defmodule BenvpWeb.Router do
       live "/blog/:slug", PostLive
 
       live "/motion", MotionLive
+
+      live "/wizard", WizardLive
+      live "/wizard/:step", WizardLive
     end
   end
 

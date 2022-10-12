@@ -46,51 +46,17 @@ defmodule BenvpWeb.MotionLive do
     <div class="mt-12 max-w-screen-md m-auto flex justify-center space-y-4 flex-col items-center">
       <div class="my-4 flex flex-wrap items-center justify-center space-x-4">
         <%= if @visible do %>
-          <%= for i <- @range do %>
-            <LiveMotion.presence id={"presence-#{i}"}>
-              <LiveMotion.motion
-                id={"rectangle-#{i}-#{@index}"}
-                class="w-24 h-24 bg-benvp-green flex rounded-lg justify-center items-center mb-4"
-                initial={[opacity: 0, y: -30, rotate: 0]}
-                animate={
-                  [
-                    opacity: 1,
-                    y: 0,
-                    rotate: @rotate,
-                    transition: [duration: 0.3, delay: i * (Enum.random(1..5) / 100)]
-                  ]
-                }
-                exit={
-                  [
-                    opacity: 0,
-                    y: 30,
-                    transition: [delay: i * (Enum.random(1..5) / 100)]
-                  ]
-                }
-                transition={[duration: 2, easing: :spring]}
-                hover={[scale: 1.2]}
-                press={[scale: 0.9]}
-                on_motion_start="animation_start"
-                on_motion_complete="animation_complete"
-              >
-                <LiveMotion.motion
-                  id={"inner-rectangle-#{i}-#{@index}"}
-                  class="text-4xl text-black"
-                  initial={[opacity: 0, scale: 0.5]}
-                  animate={[opacity: 1, scale: 1]}
-                  transition={[delay: 0.5 + Enum.random(1..10) / 10]}
-                >
-                  <%= i + @index * 32 %>
-                </LiveMotion.motion>
-              </LiveMotion.motion>
-            </LiveMotion.presence>
-          <% end %>
+          <LiveMotion.motion
+            id={"rectangle-#{@index}"}
+            class="w-24 h-24 bg-benvp-green rounded-lg"
+            initial={[opacity: 0, y: -20, rotate: 0]}
+            animate={[opacity: 1, y: 0, rotate: @rotate]}
+            exit={[opacity: 0, y: -20]}
+            on_motion_start="animation_start"
+            on_motion_complete="animation_complete"
+          />
         <% end %>
       </div>
-
-      <button type="button" class="px-4 py-2 bg-slate-800 rounded" phx-click="next">
-        Next
-      </button>
 
       <button
         type="button"
