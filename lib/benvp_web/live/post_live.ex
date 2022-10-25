@@ -13,7 +13,7 @@ defmodule BenvpWeb.PostLive do
       SeoMeta.seo_meta_attrs(%SeoMeta{
         title: SeoMeta.page_title(post.title),
         description: post.abstract,
-        image_url: Routes.static_url(socket, "/images/meta-logo.png"),
+        image_url: Routes.static_url(socket, post.social_image_url || "/images/meta-logo.png"),
         url: Routes.live_path(socket, __MODULE__, post.slug)
       })
 
