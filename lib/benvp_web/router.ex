@@ -14,6 +14,12 @@ defmodule BenvpWeb.Router do
     plug :accepts, ["json"]
   end
 
+  scope "/healthz", BenvpWeb do
+    pipe_through :api
+
+    get "/", HealthzController, :index
+  end
+
   live_session :default do
     scope "/", BenvpWeb do
       pipe_through :browser

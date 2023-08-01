@@ -14,7 +14,7 @@ defmodule BenvpWeb.Endpoint do
 
   plug Plug.Static,
     at: "/media",
-    from: Application.fetch_env!(:benvp, :notion_media_dir),
+    from: Application.compile_env!(:benvp, :notion_media_dir),
     gzip: false
 
   # Serve at "/" the static files from "priv/static" directory.
@@ -24,7 +24,7 @@ defmodule BenvpWeb.Endpoint do
   plug Plug.Static,
     at: "/",
     from: :benvp,
-    gzip: Application.fetch_env!(:benvp, :env) == :prod,
+    gzip: Application.compile_env!(:benvp, :env) == :prod,
     only:
       ~w(assets fonts images robots.txt site.webmanifest favicon.ico favicon-16x16.png favicon-32x32.png android-chrome-192x192.png android-chrome-512x512.png apple-touch-icon.png robots.txt)
 

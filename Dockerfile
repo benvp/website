@@ -17,6 +17,8 @@ ARG RUNNER_IMAGE="debian:bullseye-20210902-slim"
 
 FROM ${BUILDER_IMAGE} as builder
 
+ARG NOTION_MEDIA_DIR=/app/media
+
 # install build dependencies
 RUN apt-get update -y && apt-get install -y build-essential git curl bash \
     && apt-get clean && rm -f /var/lib/apt/lists/*_*
@@ -38,7 +40,7 @@ ENV MIX_ENV="prod"
 # We need to set this here because Plug options need to
 # be available at compilation time. We can't use runtime.exs
 # for this variable.
-ENV NOTION_MEDIA_DIR="/app/media"
+ENV NOTION_MEDIA_DIR=${NOTION_MEDIA_DIR}
 
 # install mix dependencies
 COPY mix.exs mix.lock ./
@@ -78,7 +80,7 @@ RUN mix release
 # the compiled release and other runtime necessities
 FROM ${RUNNER_IMAGE}
 
-RUN apt-get update -y && apt-get install -y libstdc++6 openssl libncurses5 locales \
+RUN apt-get update -y && apt-get install -y libstdc++6 openssl libncurses5 locales curl \
   && apt-get clean && rm -f /var/lib/apt/lists/*_*
 
 # Set the locale
@@ -89,11 +91,21 @@ ENV LANGUAGE en_US:en
 ENV LC_ALL en_US.UTF-8
 
 WORKDIR "/app"
-RUN chown nobody /app
+
+RUN addgroup --system --gid 1024 beam
+RUN adduser --system --uid 1024 phoenix
+RUN usermod -aG beam phoenix
+
+RUN chown phoenix:beam /app
+
+# set runner ENV
+ENV MIX_ENV="prod"
 
 # Only copy the final release from the build stage
-COPY --from=builder --chown=nobody:root /app/_build/prod/rel/benvp ./
+COPY --from=builder --chown=phoenix:beam /app/_build/${MIX_ENV}/rel/benvp ./
 
-USER nobody
+USER phoenix
 
-CMD /app/bin/server
+EXPOSE 3000
+
+CMD ["/app/bin/server"]
