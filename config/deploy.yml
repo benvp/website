@@ -3,7 +3,7 @@ service: benvp
 image: benvp/website
 
 servers:
-  - s03.benvp.co
+  - s01.benvp.co
 
 ssh:
   user: benvp
@@ -29,7 +29,7 @@ builder:
     NOTION_MEDIA_DIR: /app/media
   remote:
     arch: amd64
-    host: ssh://benvp@s03.benvp.co
+    host: ssh://benvp@s01.benvp.co
 
 volumes:
   - "/storage/benvp/media:/app/media"
