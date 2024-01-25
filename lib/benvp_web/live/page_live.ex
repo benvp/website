@@ -114,6 +114,40 @@ defmodule BenvpWeb.PageLive do
           </div>
 
           <div class="pt-6 space-y-8">
+            <.prompt title="2024/insomnia-plugin-op">
+              <:line>
+                <.terminal_line>1Password Plugin for the Insomnia REST client.</.terminal_line>
+                <.terminal_line>
+                  <a
+                    class="terminal-link"
+                    href="https://github.com/benvp/insomnia-plugin-op"
+                    rel="noreferrer"
+                    target="_blank"
+                  >
+                    GitHub
+                  </a>
+                  | MIT License
+                </.terminal_line>
+              </:line>
+            </.prompt>
+
+            <.prompt title="2023/ex_cva">
+              <:line>
+                <.terminal_line>Easily construct class variants in Elixir.</.terminal_line>
+                <.terminal_line>
+                  <a
+                    class="terminal-link"
+                    href="https://github.com/benvp/ex_cva"
+                    rel="noreferrer"
+                    target="_blank"
+                  >
+                    GitHub
+                  </a>
+                  | MIT License
+                </.terminal_line>
+              </:line>
+            </.prompt>
+
             <.prompt title="2022/live_motion">
               <:line>
                 <.terminal_line>High performance animations for Phoenix LiveView.</.terminal_line>
@@ -131,42 +165,8 @@ defmodule BenvpWeb.PageLive do
               </:line>
             </.prompt>
 
-            <.prompt title="2021/raycast_set_audio_device">
-              <:line>
-                <.terminal_line>Switch the active audio device of your Mac.</.terminal_line>
-                <.terminal_line>
-                  <a
-                    class="terminal-link"
-                    href="https://www.raycast.com/benvp/audio-device"
-                    rel="noreferrer"
-                    target="_blank"
-                  >
-                    Raycast Store
-                  </a>
-                  | MIT License
-                </.terminal_line>
-              </:line>
-            </.prompt>
-
-            <.prompt title="2020/toniefy">
-              <:line>
-                <.terminal_line>listen spotify on your toniebox</.terminal_line>
-                <.terminal_line>
-                  <a
-                    class="terminal-link"
-                    href="https://github.com/benvp/toniefy"
-                    rel="noreferrer"
-                    target="_blank"
-                  >
-                    GitHub
-                  </a>
-                  | MIT License
-                </.terminal_line>
-              </:line>
-            </.prompt>
-
             <.terminal_line>
-              <span class="inline-flex">
+              <span class="inline-flex mt-4">
                 <a class="font-mono terminal-link" href="https://github.com/benvp" rel="noreferrer">
                   See all projects
                 </a>
